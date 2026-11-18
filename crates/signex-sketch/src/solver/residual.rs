@@ -75,7 +75,7 @@ fn resolve_dim_with(
         DimTarget::Literal(v) if v.is_finite() => Ok(*v),
         DimTarget::Literal(v) => Err(SketchError::Expr(ExprError::NonFinite(format!("{v}")))),
         DimTarget::Expr(s) => {
-            let body = s.trim().trim_start_matches('=').trim();
+            let body = signex_expr::expression_body(s);
             // Fast path: single bare identifier.
             if !body.is_empty()
                 && body.chars().all(|c| c.is_alphanumeric() || c == '_')

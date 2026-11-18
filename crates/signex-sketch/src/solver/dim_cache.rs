@@ -12,6 +12,10 @@
 use std::collections::{BTreeMap, HashMap};
 use std::sync::OnceLock;
 
+// The shared sketch-style rule (trim, strip one leading `=`);
+// `residual::resolve_dim` keys its cache lookup with the same function.
+use signex_expr::expression_body;
+
 use crate::constraint::DimTarget;
 use crate::expr::ExprError;
 use crate::expr::ast::ExprNode;
@@ -21,11 +25,6 @@ use crate::parameter::resolve_quantities;
 use crate::sketch::SketchData;
 use crate::solver::residual::ResolvedParams;
 use crate::unit::{Quantity, UnitFamily};
-
-/// The text of an expression target as the parser sees it.
-fn expression_body(source: &str) -> &str {
-    source.trim().trim_start_matches('=').trim()
-}
 
 /// Parse `body`, counting the call in tests.
 pub(crate) fn parse_counted(body: &str) -> Result<ExprNode, ExprError> {
